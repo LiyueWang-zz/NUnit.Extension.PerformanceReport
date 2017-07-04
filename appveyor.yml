@@ -1,0 +1,20 @@
+version: 1.0.0-{branch}-{build}
+
+environment:
+  ASSEMBLY_FILE_VERSION: 1.0.0
+
+nuget:
+  account_feed: true
+
+configuration: Release
+platform: Any CPU
+
+before_build:
+  - nuget restore
+  - nuget install AppVeyorAssemblyVersionInfoWriter -Version 1.0.0 -OutputDirectory packages
+  - packages\AppVeyorAssemblyVersionInfoWriter.1.0.0\tools\AppVeyorAssemblyVersionInfoWriter.exe --output NUnit.Extension.PerformanceReport\VersionInfo.cs
+
+build:
+  include_nuget_references: false
+  publish_nuget: true
+  publish_nuget_symbols: false
